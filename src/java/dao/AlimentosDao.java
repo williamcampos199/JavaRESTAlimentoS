@@ -61,9 +61,47 @@ public class AlimentosDao {
     }
     
     
+    
+     public Alimento SelectByID(int id) {
+        Alimento alimento = new Alimento();
+        
+        sql = "SELECT * FROM alimento WHERE idalimento = ?;";
+        try{
+        con = Conexao.conectar();  //Conecta com o banco de dados
+        pst = con.prepareStatement(sql);  //Prepara o SQL
+        pst.setInt(1, id);
+        rs = pst.executeQuery(); //Executa a query e retorna um resultset
+        
+        while(rs.next()){
+           
+           alimento.setIdAlimento(rs.getInt("idalimento"));
+            alimento.setNome(rs.getString("nome"));
+            alimento.setCalorias(rs.getInt("calorias"));
+            alimento.setGordura(rs.getDouble("gordura"));
+            alimento.setCarboidratos(rs.getDouble("carboidratos"));
+            alimento.setPorcao(rs.getString("porcao"));
+           
+            
+           
+        }
+        Conexao.fechaConexao();//desconecta do banco de dados
+        return alimento;
+        
+    }catch(SQLException ex){
+      
+            System.err.println("Erro de SQL no Select do Alimento" + ex.getMessage());
+        
+        return null;
+    }
+        
+    }
+    
+    
+    
+    
     public boolean Insert(Alimento alimento) {
       try{
-        sql = "INSERT INTO alimento (nome, calorias, gordura, carboidratos, porcao) VALUES (?,?,?,?,?,?)";
+        sql = "INSERT INTO alimento (nome, calorias, gordura, carboidratos, porcao) VALUES (?,?,?,?,?)";
         con = Conexao.conectar();
         pst = con.prepareStatement(sql);
         pst.setString(1,alimento.getNome());

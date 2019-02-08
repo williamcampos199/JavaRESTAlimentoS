@@ -11,10 +11,14 @@ import javax.ws.rs.core.Context;
 import javax.ws.rs.core.UriInfo;
 import javax.ws.rs.Produces;
 import javax.ws.rs.Consumes;
+import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
+import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.PUT;
+import javax.ws.rs.PathParam;
 import javax.ws.rs.core.MediaType;
+import model.Alimento;
 
 /**
  * REST Web Service
@@ -39,19 +43,60 @@ public class Alimentos {
      */
     @GET
     @Produces(MediaType.APPLICATION_JSON)
-    public String getJson() {
+      @Path("/recuperar")
+    public String getAlimentos() {
         AlimentosDao dao = new AlimentosDao();
         Gson gson = new Gson();
       return  gson.toJson(dao.Select());
         
     }
 
-    /**
-     * PUT method for updating or creating an instance of Alimentos
-     * @param content representation for the resource
-     */
+    
+    @GET
+    @Produces(MediaType.APPLICATION_JSON)
+      @Path("/recuperar/{id}")
+    public String getAlimentos(@PathParam("id") int id) {
+        AlimentosDao dao = new AlimentosDao();
+        Gson gson = new Gson();
+      return  gson.toJson(dao.SelectByID(id));
+        
+    }
+    
+    
+    
     @PUT
     @Consumes(MediaType.APPLICATION_JSON)
-    public void putJson(String content) {
+    
+    public void UpdateAlimento(@PathParam("id") int id  ,String content ) {
+    Gson g = new Gson();
+     Alimento alimento = (Alimento) g.fromJson(content, Alimento.class);
+    AlimentosDao dao = new AlimentosDao();
+    dao.Update(alimento);
+    
     }
+    
+    @DELETE
+    @Path("/excluir/{id:[0-9][0-9]*}")
+    public boolean excluir(@PathParam("id") String id){
+        int idAlimento = Integer.parseInt(id);
+       
+        AlimentosDao dao = new AlimentosDao();
+    return  dao.Delete(idAlimento);
+
+    }
+    
+    
+    @POST
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Path("/inserir")
+     public void inserir(String content){
+        Gson g = new Gson();
+        Alimento alimento = g.fromJson(content, Alimento.class);
+        AlimentosDao dao = new AlimentosDao();
+        dao.Insert(alimento);
+    }
+    
+        
+    
+    
 }
