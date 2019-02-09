@@ -89,7 +89,7 @@ public class AlimentosDao {
         
     }catch(SQLException ex){
       
-            System.err.println("Erro de SQL no Select do Alimento" + ex.getMessage());
+            System.err.println("Erro de SQL no Select do Alimento  Por ID" + ex.getMessage());
         
         return null;
     }
@@ -128,7 +128,8 @@ public class AlimentosDao {
         con = Conexao.conectar();
         pst = con.prepareStatement(sql);
         pst.setInt(1, id);
-        pst.execute();
+       int confirmacaoDelete = pst.executeUpdate();
+           System.out.println(confirmacaoDelete + "");
         Conexao.fechaConexao();
         return true;
         
@@ -142,7 +143,7 @@ public class AlimentosDao {
     
     public boolean Update(Alimento alimento) {
       try{
-        sql = "UPDATE alimento SET nome = ? , calorias = ?, gordura = ?, carboidratos =?, porcao =? WHERE id = ? ";
+        sql = "UPDATE alimento SET nome = ? , calorias = ?, gordura = ?, carboidratos =?, porcao =? WHERE idAlimento = ? ";
         con = Conexao.conectar();
         pst = con.prepareStatement(sql);
         pst.setString(1, alimento.getNome());
@@ -150,7 +151,7 @@ public class AlimentosDao {
         pst.setDouble(3, alimento.getGordura());
         pst.setDouble(4, alimento.getCarboidratos());
         pst.setString(5, alimento.getPorcao());
-        pst.setInt(3, alimento.getIdAlimento());
+        pst.setInt(6, alimento.getIdAlimento());
         
        
         pst.executeUpdate();
