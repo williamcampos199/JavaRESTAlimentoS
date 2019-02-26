@@ -55,8 +55,8 @@ public class Alimentos {
     @GET
     @Produces(MediaType.APPLICATION_JSON)
       @Path("/{id}")
-    public String getAlimentos(@PathParam("id") String id) {
-        int idAlimento = Integer.parseInt(id);
+    public String getAlimentos(@PathParam("id") int idAlimento) {
+         
         AlimentosDao dao = new AlimentosDao();
         Gson gson = new Gson();
       return  gson.toJson(dao.SelectByID(idAlimento));
@@ -68,11 +68,11 @@ public class Alimentos {
     @PUT
     @Consumes(MediaType.APPLICATION_JSON)
      @Path("/{id}")
-    public void UpdateAlimento(@PathParam("id") String id  ,String content ) {
-     if(id != null){
+    public void UpdateAlimento(@PathParam("id") int idAlimento  ,String content ) {
+     if(idAlimento >= 0){
     Gson g = new Gson();
      Alimento alimento = (Alimento) g.fromJson(content, Alimento.class);
-     alimento.setIdAlimento(Integer.parseInt(id));
+     alimento.setIdAlimento(idAlimento);
     AlimentosDao dao = new AlimentosDao();
     dao.Update(alimento);
      }
@@ -81,8 +81,8 @@ public class Alimentos {
     
     @DELETE
     @Path("/{id}")
-    public boolean excluir(@PathParam("id") String id){
-        int idAlimento = Integer.parseInt(id);
+    public boolean excluir(@PathParam("id") int idAlimento){
+         
        
         AlimentosDao dao = new AlimentosDao();
     return  dao.Delete(idAlimento);
